@@ -1,15 +1,18 @@
+require('dotenv').config()
 const AWS = require('aws-sdk')
 const fs = require('fs')
 
 const Polly = new AWS.Polly({
-	region: 'ap-south-1'
+	region: 'ap-south-1',
+	accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+	secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 })
 
 const input = {
-	Text: "Hola, Buenas dias.",
+	Text: "Hello, World!, I am a test",
 	OutputFormat: "mp3",
-	VoiceId: "Mia",
-	LanguageCode: "es-ES" 
+	VoiceId: "Kendra",
+	LanguageCode: "en-US"
 }
 
 Polly.synthesizeSpeech(input, (err, data) => {
@@ -18,7 +21,7 @@ Polly.synthesizeSpeech(input, (err, data) => {
 		return
 	}
 	if (data.AudioStream instanceof Buffer) {
-		fs.writeFile('hello.mp3', data.AudioStream, (fsErr) => {
+		fs.writeFile('synth.mp3', data.AudioStream, (fsErr) => {
 			if (fsErr) {
 				console.error(fsErr)
 				return
